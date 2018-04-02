@@ -236,7 +236,7 @@ def test_build_nn(build_nn):
         test_embed_dim = 300
         test_rnn_layer_size = 2
         test_vocab_size = 27
-        test_cell = rnn.MultiRNNCell([rnn.BasicLSTMCell(test_rnn_size)] * test_rnn_layer_size)
+        test_cell = rnn.MultiRNNCell([rnn.BasicLSTMCell(test_rnn_size) for _ in range(test_rnn_layer_size)])
 
         logits, final_state = build_nn(test_cell, test_rnn_size, test_input_data, test_vocab_size, test_embed_dim)
 
@@ -249,7 +249,7 @@ def test_build_nn(build_nn):
         # Check Shape
         assert logits.get_shape().as_list() == test_input_data_shape + [test_vocab_size], \
             'Outputs has wrong shape.  Found shape {}'.format(logits.get_shape())
-        assert final_state.get_shape().as_list() == [test_rnn_layer_size, 2, None, test_rnn_size], \
+        assert final_state.get_shape().as_list() == [test_rnn_layer_size, 2, 128, test_rnn_size], \
             'Final state wrong shape.  Found shape {}'.format(final_state.get_shape())
 
     _print_success_message()
